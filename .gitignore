@@ -1,0 +1,12 @@
+build
+lib
+out
+bin
+.settings
+.gradle
+.idea
+.sessions
+*.iml
+*.ipr
+*.iws
+.DS_Store

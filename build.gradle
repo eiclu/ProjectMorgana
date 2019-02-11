@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+group 'at.morgana'
+version '1.0-SNAPSHOT'
+mainClassName = 'MainKt'
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/ktor' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //compile project('discord')
+
+    compile "org.slf4j:slf4j-api:1.7.9"
+    compile "ch.qos.logback:logback-classic:$logback_version"
+    
+    compile "io.ktor:ktor-server-core:$ktor_version"
+    compile "io.ktor:ktor-server-jetty:$ktor_version"
+    compile "io.ktor:ktor-freemarker:$ktor_version"
+    compile "io.ktor:ktor-auth:$ktor_version"
+    compile "io.ktor:ktor-client-apache:$ktor_version"
+    compile "io.ktor:ktor-websockets:$ktor_version"
+    compile "io.ktor:ktor-server-sessions:$ktor_version"
+
+    compile "org.freemarker:freemarker:2.3.28"
+    
+    compile "com.google.code.gson:gson:2.8.5"
+
+    compile "mysql:mysql-connector-java:5.1.6"
+    
+    compile "net.dv8tion:JDA:4.ALPHA.0_6"
+
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    compile "org.jetbrains.kotlin:kotlin-script-runtime:1.3.20"
+}
+
+task stage {
+    dependsOn installDist
+}

@@ -1,0 +1,446 @@
+body {
+    display: flex;
+    background-color: #0A131A;
+    /*noinspection CssUnknownTarget*/
+    background-image: url("/static/background.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Montserrat', 'Avenir Next', 'Avenir', 'Arial', sans-serif;
+    overflow-x: hidden;
+    margin-right: 8%;
+}
+
+a {
+    text-decoration: none;
+}
+
+#header {
+    width: 312px;
+    margin: 128px 0 auto auto;
+    background-color: rgba(54, 57, 63, 0.92);
+    float: left;
+    border-radius: 16px 0 0 16px;
+}
+
+#content {
+    margin: 64px auto 64px 0;
+    padding: 32px 10%;
+    background-color: rgba(255, 253, 250, 0.9);
+    width: 40%;
+    border-radius: 16px;
+    min-height: 400px;
+    max-width: 600px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+#nav {
+    padding: 0;
+}
+
+#nav a, #nav b {
+    color: rgba(255, 253, 250, 0.9);
+    font-weight: 300;
+}
+
+#nav a:hover {
+    opacity: 0.6;
+    font-weight: 300;
+}
+
+#nav ul {
+    padding: 8px 0;
+    font-size: 28px;
+}
+
+#nav ul li {
+    list-style-type: none;
+    background-color: rgba(255, 253, 250, 0.07);
+    margin-bottom: 8px;
+    height: 64px;
+}
+
+#nav ul li img {
+    height: 24px;
+    width: 24px;
+    padding: 20px;
+    filter: invert(100%) sepia(6%) saturate(22%) hue-rotate(150deg) brightness(104%) contrast(104%);
+}
+
+#nav ul li p {
+    margin-top: 15px;
+}
+
+#nav ul li a, #nav ul li b {
+    height: 100%;
+    display: flex;
+}
+
+#nav ul li.active {
+    background-color: rgba(255, 253, 250, 0.25)
+}
+
+#username {
+    margin: 16px;
+    padding: 16px;
+    text-align: right;
+    float: right;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+#username, #username a {
+    color: rgba(255, 253, 250, 0.9);
+}
+
+#username img {
+    height: 96px;
+    width: 96px;
+    border-radius: 16px;
+}
+
+#username div {
+    margin-right: 12px;
+}
+
+#username div p {
+    margin: 0;
+}
+
+.user-name {
+    font-size: 24px;
+    line-height: 0.85;
+}
+
+.user-tag {
+    font-weight: 300;
+}
+
+.user-logout {
+    opacity: 0.2;
+    font-weight: 300;
+}
+
+#discord {
+    padding-top: 128px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#discord div {
+    width: 50%;
+    text-align: center;
+}
+
+#discord div a img {
+    height: 26px;
+    width: 106px;
+    margin: -4px -2px;
+}
+
+table {
+    width: 100%;
+}
+
+input[type="text"] {
+    width: 100%;
+}
+
+#token {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#token img {
+    max-width: 340px;
+    margin: 6px;
+}
+
+#token p {
+    margin: 6px;
+}
+
+#courses-list li {
+    list-style-type: none;
+}
+
+#courses-list ul {
+    padding-left: 0;
+}
+
+.sideOut {
+    margin: 0 -10%;
+}
+
+.subject {
+    margin: 0 -10%;
+    background-color: rgba(54, 57, 63, 0.92);
+    color: rgba(255, 253, 250, 0.9);
+    font-size: 24px;
+    border-radius: 16px;
+    display: block;
+    padding: 16px 16px 16px 24px;
+}
+
+.module-list {
+    margin: 16px 0;
+}
+
+.module {
+    font-weight: 400;
+}
+
+.blocked {
+    background-color: rgba(54, 57, 63, 0.15);
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(54, 57, 63, 0.92);
+    margin-bottom: 8px;
+    padding: 12px 24px;
+}
+
+.blocked ul li {
+    margin: 8px 0 4px 8px;
+}
+
+.course {
+    font-size: 28px;
+    margin-left: 36px;
+    display: block;
+}
+
+.class_checkbox {
+    width: 32px;
+    height: 32px;
+    float: left;
+    margin-top: 1px;
+    margin-right: 8px;
+    background-size: cover;
+    /*noinspection CssUnknownTarget*/
+    background-image: url("/static/square.svg");
+ }
+
+.class_checkbox.checked {
+    /*noinspection CssUnknownTarget*/
+    background-image: url("/static/check-square.svg");
+}
+
+#bottombar {
+    display: none;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background-color: rgba(54, 57, 63, 0.92);
+    color: rgba(255, 253, 250, 0.9);
+    border-radius: 16px;
+    cursor: pointer;
+    padding: 16px;
+}
+
+#bottombar img {
+    filter: invert(100%) sepia(6%) saturate(22%) hue-rotate(150deg) brightness(104%) contrast(104%);
+    height: 32px;
+    float: left;
+}
+
+#bottombar input[type="submit"], #bottombar span {
+    color: rgba(255, 253, 250, 0.9);
+    background-color: rgba(54, 57, 63, 0);
+    font-size: 24px;
+    font-family: 'Montserrat', 'Avenir Next', 'Avenir', 'Arial', sans-serif;
+    border: none;
+    cursor: pointer;
+    padding-left: 8px;
+}
+
+#bottombar:hover {
+    opacity: 0.8;
+}
+
+#search {
+    font-size: 24px;
+    border: 0;
+    padding: 16px 24px;
+    margin-top: 16px;
+}
+
+.disHighlight{
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+}
+
+#addChannelTable ul {
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+#addChannelTable li {
+    list-style-type: none;
+    width: 50%;
+}
+
+#addChannelTable input[type=text] {
+    font-size: 24px;
+    border: 0;
+    padding: 16px 0;
+    text-align: center;
+}
+
+.button2 {
+    border-width: 4px;
+    border-color: rgba(54, 57, 63, 0.92);
+    color: rgba(54, 57, 63, 0.92);
+    font-family: 'Montserrat', 'Avenir Next', 'Avenir', 'Arial', sans-serif;
+    font-size: 24px;
+    padding: 14px;
+    margin-top: 16px;
+    margin-left: 8px;
+    border-radius: 16px;
+    cursor: pointer;
+    float: right;
+    border-style: solid;
+}
+
+.button2:hover {
+    opacity: 0.8;
+}
+
+#form-info input[type=text] {
+    padding: 16px 24px;
+    border: 0;
+    font-size: 18px;
+}
+
+#form-channels ul {
+    padding: 0;
+}
+
+#form-channels li {
+    list-style-type: none;
+}
+
+#form-channels input[type=text] {
+    padding: 16px 24px;
+    font-size: 18px;
+    background-color: rgba(54, 57, 63, 0.15);
+    color: rgba(54, 57, 63, 0.92);
+    border-style: none;
+}
+
+.course small {
+    font-style: italic;
+}
+
+/*#form-info div {
+    float: right;
+    display: flex;
+    margin: 0 -10%;
+}
+
+#form-info div * {
+    margin: 0 0 0 8px;
+}*/
+
+.gray {
+    color: rgba(54, 57, 63, 0.92);
+    font-size: 24px;
+    vertical-align: top;
+    width: 160px;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        margin: 0;
+        flex-direction: column;
+    }
+
+    #header {
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    #nav {
+        display: flex;
+    }
+
+    #nav ul {
+        margin: 0;
+        display: flex;
+        width: 100%;
+        padding: 0;
+        flex-wrap: wrap;
+    }
+
+    #nav ul li {
+        margin-bottom: 0;
+    }
+
+    #nav ul li p {
+        display: none;
+    }
+
+    #content {
+        margin: 0;
+        padding: 16px 0;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    #username {
+        margin: 0;
+        padding: 0;
+    }
+
+    #username img {
+        display: none;
+    }
+
+    .subject {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .user-name {
+        font-size: 18px;
+    }
+
+    .user-tag {
+        font-size: 12px;
+    }
+
+    .user-logout {
+
+    }
+
+    #discordInviteBox {
+        border-radius: 0 !important;
+    }
+
+    .text {
+        margin: 16px;
+    }
+
+    #addChannelTable input[type=submit] {
+        margin: 16px;
+    }
+
+    .sideOut {
+        margin: 0 16px;
+    }
+}
