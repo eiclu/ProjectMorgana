@@ -50,7 +50,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth() {
         }
         val user = Gson().fromJson(json, JsonDiscordUser::class.java)
         call.sessions.set(WebSession(user.id))
-        application.log.info("${user.username} logged in via Discord OAuth")
+        application.log.info("${user.username}#${user.discriminator} logged in via Discord OAuth")
         redirect("/")
     }
 }
