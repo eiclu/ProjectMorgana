@@ -21,7 +21,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginWithToken(token: String?
         if (userId != null) {
             call.sessions.clear<WebSession>()
             call.sessions.set(WebSession(userId))
-            application.log.info("${chatInterface.discordHelper.guild.members.find { it.user.idLong == userId }?.user?.asTag} logged in via Discord OAuth")
+            application.log.info("${chatInterface.discordHelper.guild.members.find { it.user.idLong == userId }?.user?.asTag} logged in via Token")
             redirect("/courses")
         } else {
             throw TokenException("Invalid Token")
