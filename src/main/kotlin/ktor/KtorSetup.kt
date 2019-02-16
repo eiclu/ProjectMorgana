@@ -49,8 +49,6 @@ fun Application.module() {
     install(Sessions) {
         cookie<WebSession>("morganaSession", storage = directorySessionStorage(File(".sessions"), cached = false)) {
             cookie.path = "/"
-            /*val secretSignKey = hex("2d397203040123470f090a012c0d0e0f")
-            transform(SessionTransportTransformerMessageAuthentication(secretSignKey))*/
         }
     }
 
