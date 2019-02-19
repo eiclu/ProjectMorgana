@@ -145,6 +145,8 @@ class DatabaseHelper() {
         //language=MySQL
         updateDatabase("DELETE FROM Channels WHERE CourseId=$id")
         //language=MySQL
+        updateDatabase("DELETE FROM User_Course_Links WHERE CourseId=$id")
+        //language=MySQL
         updateDatabase("DELETE FROM Courses WHERE CourseId=$id")
     }
 

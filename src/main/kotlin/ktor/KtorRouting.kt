@@ -2,11 +2,8 @@ package ktor
 
 import chatInterface
 import databaseHelper
+import io.ktor.application.*
 import web.generatePage
-import io.ktor.application.Application
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.call
-import io.ktor.application.log
 import io.ktor.auth.authenticate
 import io.ktor.http.Parameters
 import io.ktor.http.content.resources
@@ -125,6 +122,7 @@ fun Application.setupRoutingTable() {
                 post("/deleteCourses") {
                     val params = call.receive<Parameters>()
                     val coursesToDelete = params.names().mapNotNull { it.toLongOrNull() }
+                    application.log.info("User ${getUser()!!.let { "${it.userName}#${it.userTag}" }} just deleted the Courses ${coursesToDelete.joinToString(", ")}")
                     coursesToDelete.forEach { course ->
                         databaseHelper.removeCourse(course)
                     }
