@@ -151,6 +151,7 @@ table {
 
 input[type="text"] {
     width: 100%;
+    font-family: inherit;
 }
 
 #token {
@@ -227,6 +228,7 @@ input[type="text"] {
     background-size: cover;
     /*noinspection CssUnknownTarget*/
     background-image: url("/static/square.svg");
+    filter: invert(25%) sepia(15%) saturate(318%) hue-rotate(189deg) brightness(93%) contrast(86%);
  }
 
 .class_checkbox.checked {
