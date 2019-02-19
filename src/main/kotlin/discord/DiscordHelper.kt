@@ -103,14 +103,15 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     fun addChannelForCourse(course: Course) {
         LOG.info("Adding a channel for the course ${course.course}")
         guild.controller.createTextChannel(course.shorthand ?: course.course.filter { it.isUpperCase() || it.isDigit()})
-                .addPermissionOverride(guild.roles.find { it.name == "@everyone" }, mutableListOf<Permission>(), permissions)
-                //.addPermissionOverride(guild.roles.find { it.name == "Bot" }, permissions, mutableListOf<Permission>())
-                .setTopic(arrayOf(course.course, course.module, course.subject).filterNotNull().joinToString(" - "))
-                .setParent(getCategory(course.subject))
-                .queue { channel ->
-                    guild.getTextChannelById(channel.idLong).sendMessage("Welcome on the newly created channel for ${course.course}!").queue()
-                    databaseHelper.addChannelToCourse(course.courseId, channel.idLong)
-                }
+            .addPermissionOverride(guild.roles.find { it.name == "@everyone" }, mutableListOf<Permission>(), permissions)
+            .addPermissionOverride(guild.roles.find { it.name == "Bot" }, permissions, mutableListOf<Permission>())
+            .addPermissionOverride(guild.roles.find { it.name == "Channel Inspector" }, permissions, mutableListOf<Permission>())
+            .setTopic(arrayOf(course.course, course.module, course.subject).filterNotNull().joinToString(" - "))
+            .setParent(getCategory(course.subject))
+            .queue { channel ->
+                guild.getTextChannelById(channel.idLong).sendMessage("Welcome on the newly created channel for ${course.course}!").queue()
+                databaseHelper.addChannelToCourse(course.courseId, channel.idLong)
+            }
     }
 
     fun getCategory(subject: String): Category {
