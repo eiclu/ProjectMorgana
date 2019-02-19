@@ -1,0 +1,234 @@
+/*
+Theme Name: Morgana
+Description: A theme for the Morgana Project
+Author: Luca Eichler
+Author URI: https://looki.io/
+*/
+
+:root {
+    --dark-text-color: rgba(54, 57, 63, 0.92);
+    --bright-text-color: rgba(255, 253, 250, 0.9);
+
+    --nav-bg-color: rgba(54, 57, 63, 0.92);
+    --nav-element-bg-color: rgba(255, 253, 250, 0.07);
+    --nav-element-enabled-bg-color: rgba(255, 253, 250, 0.17);
+
+    --content-bg-color: rgba(255, 253, 250, 0.9);
+    --content-dark-bg-color: rgba(54, 57, 63, 0.92);
+    --content-box-bg-color: rgba(54, 57, 63, 0.15);
+    --content-warn-bg-color: rgb(187, 0, 0)
+}
+
+/****** General Styles *********/
+
+body {
+    background-image: url("background.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+
+    font-family: 'Montserrat', 'Avenir Next', 'Avenir', 'Arial', sans-serif;
+    color: var(--dark-text-color);
+
+    display: flex;
+    justify-content: center;
+
+    margin: 0;
+}
+
+dd {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+/****** Navigation Style *********/
+
+nav {
+    color: var(--bright-text-color);
+    background-color: var(--nav-bg-color);
+    border-radius: 16px 0 0 16px;
+
+    margin: 128px 0 auto auto;
+    width: 312px;
+}
+
+nav a {
+    color: var(--bright-text-color);
+}
+
+nav li {
+    list-style-type: none;
+}
+
+nav > ul {
+    padding: 0;
+    margin: 32px 0;
+}
+
+nav > ul > li {
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+nav > ul > li > a {
+    background-color: var(--nav-element-bg-color);
+    font-size: 28px;
+    font-weight: 300;
+
+    display: block;
+    padding: 16px;
+}
+
+nav > ul > li > a:hover, a.enabled {
+    background-color: var(--nav-element-enabled-bg-color);
+}
+
+nav > ul > li > a > span {
+    padding-left: 8px;
+}
+
+nav .feather {
+    margin: 8px 0 0 4px;
+}
+
+#username {
+    height: 96px;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 16px;
+}
+
+#username ul {
+    margin: 20px 16px;
+}
+
+#username li {
+    text-align: right;
+}
+
+#username img {
+    height: 96px;
+    width: 96px;
+    float: right;
+}
+
+#username .name {
+    font-size: 24px;
+    line-height: 0.80;
+}
+
+#username .tag {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+#username .logout > a {
+    font-weight: 300;
+    opacity: 0.2;
+}
+
+/****** General Content Style *********/
+
+main {
+    background-color: var(--content-bg-color);
+    border-radius: 16px;
+
+    margin: 64px 15% 64px 0;
+    padding: 32px 10%;
+    width: 40%;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+p.warn {
+    background-color: var(--content-warn-bg-color);
+    color: var(--bright-text-color);
+    padding: 16px;
+}
+
+/****** Definitions *********/
+
+.feather {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/****** Responsive Style *********/
+
+@media only screen and (max-width: 600px) {
+    body {
+        flex-direction: column;
+    }
+
+    nav {
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    nav > ul {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+    }
+
+    nav > ul > li {
+        width: 64px;
+        margin: 0;
+    }
+
+    nav > ul > li > a > span {
+        display: none;
+    }
+
+    #username {
+        margin: 0 8px 0 auto;
+        height: 64px;
+    }
+
+    #username ul {
+        margin: 8px 0;
+    }
+
+    #username .name {
+        font-size: 18px;
+    }
+
+    #username .tag {
+        font-size: 12px;
+    }
+
+    #username img {
+        display: none;
+    }
+
+    main {
+        border-radius: 0;
+
+        width: 100%;
+        margin: 0;
+        padding: 16px 0;
+    }
+
+    p.warn {
+        margin: 16px 0 0 0;
+    }
+
+    .breakable {
+        -ms-word-break: break-all;
+        word-break: break-all;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+    }
+}

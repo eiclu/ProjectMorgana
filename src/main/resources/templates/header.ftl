@@ -1,26 +1,31 @@
 <#-- @ftlvariable name="navigation" type="java.util.Set<web.Page>" -->
 <#-- @ftlvariable name="user" type="types.User" -->
-<div id="nav">
-    <ul>
-        <#list navigation as page>
-            <li class="<#if !page.url??>active</#if>">
-                <#if !page.url??><b><#else><a href="${page.url}"></#if>
-                    <img src="${page.iconUrl}">
-                    <p>${page.title}</p>
-                <#if !page.url??></b><#else></a></#if>
-            </li>
-        </#list>
-    </ul>
+<ul>
+
+    <#list navigation as page>
+        <li>
+            <a href="${page.url!"#"}" class="<#if !page.url??>enabled</#if>">
+                <#if page.iconName??>
+                    <svg class="feather">
+                        <use xlink:href="static/feather-sprite.svg#${page.iconName}"/>
+                    </svg>
+                </#if>
+                <span>${page.title}</span>
+            </a>
+        </li>
+    </#list>
     <#if user??>
-        <div id="username">
-            <div>
-                <p class="user-name">${user.userName!""}</p>
-                <p class="user-tag">${user.userTag!""}</p>
-                <p class="user-logout"><a href="/logout">Logout</a></p>
-            </div>
+        <li id="username">
+            <ul>
+                <li class="name">${user.userName!""}</li>
+                <li class="tag">${user.userTag!""}</li>
+                <li class="logout">
+                    <a href="/logout">Logout</a>
+                </li>
+            </ul>
             <#if user.userImageUrl??>
                 <img src="${user.userImageUrl}">
             </#if>
-        </div>
+        </li>
     </#if>
-</div>
+</ul>

@@ -1,0 +1,110 @@
+/*
+Theme Name: Morgana Courses
+Description: A theme for the Morgana Project
+Author: Luca Eichler
+Author URI: https://looki.io/
+*/
+
+/****** Above Courses List *********/
+
+#search {
+    font-family: inherit;
+    font-weight: 300;
+    font-size: 28px;
+    border: 0;
+    box-sizing: border-box;
+
+    width: 100%;
+    margin: 16px 0 0 0;
+    padding: 16px;
+}
+
+/****** Courses Headers *********/
+
+.subjects > dt {
+    font-size: 24px;
+    background-color: var(--content-dark-bg-color);
+    color: var(--bright-text-color);
+    border-radius: 16px;
+
+    margin: 0 -10%;
+    padding: 16px 24px;
+}
+
+/****** Module Boxes *********/
+
+.modules li {
+    list-style-type: none;
+}
+
+.modules ul {
+    padding: 0;
+    margin: 0;
+}
+
+.modules > dt {
+    font-size: 18px;
+    background-color: var(--content-box-bg-color);
+
+    margin: 8px 0 0 0;
+    padding: 16px 16px 4px 16px;
+}
+
+.modules > dd {
+    background-color: var(--content-box-bg-color);
+
+    padding: 0 16px 16px 16px;
+}
+
+
+.course {
+    font-size: 28px;
+    font-weight: 300;
+    display: flex;
+}
+
+.course span {
+    margin: 2px;
+}
+
+.course small {
+    font-size: 16px;
+}
+
+/****** Custom Checkboxes *********/
+
+.course > input[type=checkbox] {
+    visibility: hidden;
+
+    height: 32px;
+    width: 32px;
+}
+
+.course > input[type=checkbox]::after {
+    visibility: visible;
+    display: inline-block;
+    content: "";
+
+    background-image: url("square.svg");
+    background-size: cover;
+
+    height: 32px;
+    width: 32px;
+}
+
+.course > input[type=checkbox]:checked::after {
+    background-image: url("check-square.svg");
+}
+
+/****** Responsive Style *********/
+
+@media only screen and (max-width: 600px) {
+    p {
+        margin: 0 16px
+    }
+
+    .subjects > dt {
+        margin: 0;
+        border-radius: 0;
+    }
+}

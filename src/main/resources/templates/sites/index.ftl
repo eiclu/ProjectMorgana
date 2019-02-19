@@ -1,17 +1,7 @@
-<script src="/static/discordInvite.js"></script>
-<script>
-    discordInvite.init({
-        inviteCode: 'BnvQsEp',
-        title: 'Informatik W18',
-        introText: 'CLICK HERE TO JOIN OUR SERVER',
-        width: '100%'
-    });
-    discordInvite.render();
-</script>
 <div class="text">
     <h1>Willkommen bei Matterleast</h1>
 </div>
-<div style="" id="discordInviteBox"></div>
+<div id="discordInviteBox"></div>
 <div class="text">
     <p>
         Hey, neu im Studium? suchst du nach nem Ort um dich mit anderen auszutauschen oder generell Fragen stellen zu können? Dann schau doch bei unserem Discord Server vorbei. Hier geben wir dir eine Starthilfe.
@@ -30,8 +20,16 @@
     </ul>
     <h2><small>Was ist Discord?</small></h2>
     <p>
-        <small>
-            Discord ist ein kostenloser Instant Messenger. In der App kann man Servern beitreten, die sich verschiedenen Themen widmen. Unserer Server soll Informatik-Studierenden der TU Wien eine Plattform bieten, um sich mit Mitstudierenden über Uni-relevante, aber auch andere Themen auszutauschen.
-        </small>
+        Discord ist ein kostenloser Instant Messenger. In der App kann man Servern beitreten, die sich verschiedenen Themen widmen. Unserer Server soll Informatik-Studierenden der TU Wien eine Plattform bieten, um sich mit Mitstudierenden über Uni-relevante, aber auch andere Themen auszutauschen.
     </p>
 </div>
+<script src="/static/discordInvite.js"></script>
+<script>
+    discordInvite.init({
+        inviteCode: 'BnvQsEp',
+        title: 'Informatik W18',
+        introText: 'CLICK HERE TO JOIN OUR SERVER',
+        width: '100%'
+    });
+    discordInvite.render();
+</script>
