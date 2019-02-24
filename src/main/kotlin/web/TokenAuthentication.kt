@@ -24,7 +24,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginWithToken(token: String?
             application.log.info("${chatInterface.discordHelper.guild.members.find { it.user.idLong == userId }?.user?.asTag} logged in via Token")
             redirect("/courses")
         } else {
-            throw TokenException("Invalid Token")
+            throw TokenException("Invalid Token. Please PM the bot with any message to get a fresh Link")
         }
     } else {
         throw TokenException("Please provide a token")

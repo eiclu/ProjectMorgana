@@ -202,6 +202,9 @@ fun Application.setupRoutingTable() {
                 get {
                     call.respond(generatePage("/login", "templates/sites/login.ftl", mapOf(), getUser()))
                 }
+                get("/token") {
+                    call.respond(generatePage("/login/token", "templates/sites/token.ftl", mapOf(), getUser()))
+                }
                 get("/token/{token}") { loginWithToken(call.parameters["token"]) }
                 authenticate("discordOauth") { get("/oauth") { loginWithDiscordOauth() } }
             }
