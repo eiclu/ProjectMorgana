@@ -91,12 +91,12 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         }
     }
 
-    suspend fun GuildChannel.safeAddPermissionOverrideAsync(member: Member, permissions: MutableList<Permission>, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) == null) suspendCoroutine { cont ->
+    private suspend fun GuildChannel.safeAddPermissionOverrideAsync(member: Member, permissions: MutableList<Permission>, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) == null) suspendCoroutine { cont ->
         val override = createPermissionOverride(member)
         override.setAllow(permissions).queueAfter(delayMilis, TimeUnit.MILLISECONDS)  { cont.resume(true) }
     } else false
 
-    suspend fun GuildChannel.safeRemovePermissionOverrideAsync(member: Member, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) != null) suspendCoroutine { cont ->
+    private suspend fun GuildChannel.safeRemovePermissionOverrideAsync(member: Member, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) != null) suspendCoroutine { cont ->
         getPermissionOverride(member).delete().queueAfter(delayMilis, TimeUnit.MILLISECONDS)  { cont.resume(true) }
     } else false
 
@@ -114,7 +114,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
             }
     }
 
-    fun getCategory(subject: String): Category {
+    private fun getCategory(subject: String): Category {
         if (guild.getCategoriesByName(subject, true).isEmpty()) {
             guild.controller.createCategory(subject).complete()
         }
