@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction
+import org.junit.experimental.categories.Categories
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import types.Course
@@ -115,11 +116,13 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     }
 
     private fun getCategory(subject: String): Category {
-        if (guild.getCategoriesByName(subject, true).isEmpty()) {
+        if (guild.getCategoriesFiltered(subject).isEmpty()) {
             guild.controller.createCategory(subject).complete()
         }
-        return guild.getCategoriesByName(subject, true).first()
+        return guild.getCategoriesFiltered(subject).first()
     }
+
+    private fun Guild.getCategoriesFiltered(subject: String): List<Category> = getCategoriesByName(subject, true).filter { it.channels.size < 50 }
 
     fun addChannels() {
         val courses = databaseHelper.getCourses()
