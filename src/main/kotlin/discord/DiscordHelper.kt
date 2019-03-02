@@ -33,9 +33,21 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         }
     }
 
-    suspend fun PrivateChannel.sendMessageAsync(message: String, delayMilis: Long = 0): Message = suspendCoroutine { cont -> sendMessage(message).queueAfter(delayMilis, TimeUnit.MILLISECONDS) { cont.resume(it) } }
+    suspend fun PrivateChannel.sendMessageAsync(message: String, delayMilis: Long = 0): Message = suspendCoroutine { cont ->
+        sendMessage(message).queueAfter(delayMilis, TimeUnit.MILLISECONDS, {
+            cont.resume(it)
+        }, {
+            LOG.error("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}")
+        })
+    }
 
-    suspend fun User.openPrivateChannelAsync(): PrivateChannel = suspendCoroutine { cont -> openPrivateChannel().queue { cont.resume(it) } }
+    suspend fun User.openPrivateChannelAsync(): PrivateChannel = suspendCoroutine { cont ->
+        openPrivateChannel().queue({
+            cont.resume(it)
+        }, {
+            LOG.error("Could not open message channel to user $asTag. Reason: ${it.localizedMessage}")
+        })
+    }
 
     fun syncUsers() {
         LOG.info("Syncing users with database")
@@ -94,11 +106,29 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
 
     private suspend fun GuildChannel.safeAddPermissionOverrideAsync(member: Member, permissions: MutableList<Permission>, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) == null) suspendCoroutine { cont ->
         val override = createPermissionOverride(member)
-        override.setAllow(permissions).queueAfter(delayMilis, TimeUnit.MILLISECONDS)  { cont.resume(true) }
+        override.setAllow(permissions).queueAfter(
+            delayMilis,
+            TimeUnit.MILLISECONDS,
+            {
+                cont.resume(true)
+            },
+            {
+                LOG.error("Could not set permission overrides. Reason: ${it.localizedMessage}")
+            }
+        )
     } else false
 
     private suspend fun GuildChannel.safeRemovePermissionOverrideAsync(member: Member, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) != null) suspendCoroutine { cont ->
-        getPermissionOverride(member).delete().queueAfter(delayMilis, TimeUnit.MILLISECONDS)  { cont.resume(true) }
+        getPermissionOverride(member).delete().queueAfter(
+            delayMilis,
+            TimeUnit.MILLISECONDS,
+            {
+                cont.resume(true)
+            },
+            {
+                LOG.error("Could not set permission overrides. Reason: ${it.localizedMessage}")
+            }
+        )
     } else false
 
     fun addChannelForCourse(course: Course) {
@@ -109,10 +139,14 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
             .addPermissionOverride(guild.roles.find { it.name == "Channel Inspector" }, permissions, mutableListOf<Permission>())
             .setTopic(arrayOf(course.course, course.module, course.subject).filterNotNull().joinToString(" - "))
             .setParent(getCategory(course.subject))
-            .queue { channel ->
-                guild.getTextChannelById(channel.idLong).sendMessage("Welcome on the newly created channel for ${course.course}!").queue()
+            .queue({ channel ->
+                guild.getTextChannelById(channel.idLong)
+                    .sendMessage("Welcome on the newly created channel for ${course.course}!").queue()
                 databaseHelper.addChannelToCourse(course.courseId, channel.idLong)
-            }
+                LOG.info("Added a channel")
+            }, { exception ->
+                LOG.error("Could not add new channel. Reason: ${exception.localizedMessage}")
+            })
     }
 
     private fun getCategory(subject: String): Category {
