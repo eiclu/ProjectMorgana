@@ -3,6 +3,7 @@ package web
 import clientId
 import clientSecret
 import com.google.gson.Gson
+import databaseHelper
 import io.ktor.application.*
 import io.ktor.auth.OAuthAccessTokenResponse
 import io.ktor.auth.OAuthServerSettings
@@ -18,6 +19,7 @@ import io.ktor.sessions.set
 import io.ktor.util.pipeline.PipelineContext
 import ktor.WebSession
 import ktor.redirect
+import types.User
 
 val loginProvider = OAuthServerSettings.OAuth2ServerSettings(
     name = "discord",
@@ -49,6 +51,9 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth() {
             header("Authorization", "Bearer ${principal.accessToken}")
         }
         val user = Gson().fromJson(json, JsonDiscordUser::class.java)
+        if (!databaseHelper.isInDatabase(user.id)) {
+            databaseHelper.addUser(User(user.id))
+        }
         call.sessions.set(WebSession(user.id))
         application.log.info("${user.username}#${user.discriminator} logged in via Discord OAuth")
         redirect("/")

@@ -13,12 +13,16 @@ import io.ktor.util.pipeline.PipelineContext
 import jdaInstance
 import ktor.WebSession
 import ktor.redirect
+import types.User
 import java.lang.Exception
 
 suspend fun PipelineContext<Unit, ApplicationCall>.loginWithToken(token: String?) {
     if (token != null) {
         val userId = databaseHelper.popToken(token)
         if (userId != null) {
+            if (!databaseHelper.isInDatabase(userId)) {
+                databaseHelper.addUser(User(userId))
+            }
             call.sessions.clear<WebSession>()
             call.sessions.set(WebSession(userId))
             application.log.info("${chatInterface.discordHelper.guild.members.find { it.user.idLong == userId }?.user?.asTag} logged in via Token")
