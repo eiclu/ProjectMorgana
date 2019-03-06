@@ -9,7 +9,7 @@
     discordInvite.render();
 </script>
 <div class="text">
-    <h1>Willkommen bei Matterleast</h1>
+    <h1>Willkommen beim inoffiziellen Discord Server für Informatik auf der TU Wien</h1>
 </div>
 <div style="" id="discordInviteBox"></div>
 <div class="text">
@@ -24,14 +24,13 @@
     </p>
     <ul>
         <li>Verschiedene Kanäle für diverse Lehrveranstaltungen in denen wir uns über Stoff und eventuelle Lösungen austauschen.</li>
-        <li>Platz für deine studienrechtlichen Fragen</li>
         <li>Memes (Ist das was womit wir Werbung machen sollten?)</li>
         <li>Hobbys (Programmierung Allgemein, Musik, Politik, Anime, Gaming, ...)</li>
     </ul>
-    <h2><small>Was ist Discord?</small></h2>
+    <h2>Was ist Discord?</h2>
     <p>
-        <small>
+        
             Discord ist ein kostenloser Instant Messenger. In der App kann man Servern beitreten, die sich verschiedenen Themen widmen. Unserer Server soll Informatik-Studierenden der TU Wien eine Plattform bieten, um sich mit Mitstudierenden über Uni-relevante, aber auch andere Themen auszutauschen.
-        </small>
+        
     </p>
 </div>

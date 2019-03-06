@@ -179,11 +179,8 @@ fun Application.setupRoutingTable() {
                     log.trace(params.joinToString { "[${it.key}] ${it.value.joinToString(",")}" })
                     val channels = chatInterface.discordHelper.guild.channels
                     params.forEach { param ->
-                        log.trace("Param: $param")
                         channels.find { it.idLong == param.key.toLongOrNull() }?.let { channel ->
-                            log.trace("Channel: ${channel.name}")
                             param.value.firstOrNull()?.let {
-                                log.info("Value: $it")
                                 channel.manager.setName(it).queue()
                             }
                         }
