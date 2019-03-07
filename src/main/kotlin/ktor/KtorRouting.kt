@@ -67,7 +67,7 @@ fun Application.setupRoutingTable() {
                 }
             }
 
-            route("/profile") {
+            /*route("/profile") {
                 intercept(ApplicationCallPipeline.Features) {
                     if (getUser() == null) {
                         redirect("/login")
@@ -83,6 +83,7 @@ fun Application.setupRoutingTable() {
 
                 post {
                     val params = call.receive<Parameters>()
+                    //TODO: Vulnerable to SQL Injection
                     getUser()?.userId?.let { userId ->
                         @Suppress("UNCHECKED_CAST")
                         databaseHelper.updateUserInfo(userId, mapOf(
@@ -93,7 +94,7 @@ fun Application.setupRoutingTable() {
                     }
                     redirect("/profile")
                 }
-            }
+            }*/
 
             route("/admin") {
                 intercept(ApplicationCallPipeline.Features) {

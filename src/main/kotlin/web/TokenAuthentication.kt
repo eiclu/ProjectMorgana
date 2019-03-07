@@ -17,7 +17,7 @@ import types.User
 import java.lang.Exception
 
 suspend fun PipelineContext<Unit, ApplicationCall>.loginWithToken(token: String?) {
-    if (token != null) {
+    if (token != null && token.matches(Regex("""[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}"""))) {
         val userId = databaseHelper.popToken(token)
         if (userId != null) {
             if (!databaseHelper.isInDatabase(userId)) {
