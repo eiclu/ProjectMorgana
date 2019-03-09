@@ -1,6 +1,7 @@
 package discord
 
 import database.DatabaseHelper
+import debug
 import domain
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -27,9 +28,11 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         if (user.isBot) return
         LOG.info("Generating an invite for user ${user.asTag}")
         val token = databaseHelper.generateTokenForUser(user.idLong)
-        kotlin.runCatching {
-            user.openPrivateChannelAsync()
-                .sendMessageAsync("Hi, I'm the channel management bot of the Matterleast Server, also known as Informatik W18 of the TU Vienna. Please go to https://$domain/login/token/$token to set channels")
+        if (!debug) {
+            kotlin.runCatching {
+                user.openPrivateChannelAsync()
+                    .sendMessageAsync("Hi, I'm the channel management bot of the Matterleast Server, also known as Informatik W18 of the TU Vienna. Please go to https://$domain/login/token/$token to set channels")
+            }
         }
     }
 
