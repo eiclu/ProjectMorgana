@@ -31,7 +31,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         if (!debug) {
             kotlin.runCatching {
                 user.openPrivateChannelAsync()
-                    .sendMessageAsync("Hi, I'm the channel management bot of the Matterleast Server, also known as Informatik W18 of the TU Vienna. Please go to https://$domain/login/token/$token to set channels")
+                    .sendMessageAsync("Hi, I'm the channel management bot of the Informatik server of the TU Vienna. Please go to https://$domain/login/token/$token to set channels")
             }
         }
     }
