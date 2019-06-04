@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="content" type="java.lang.String" -->
 <html lang="en">
 <head>
-    <title>${title}</title>
+    <title>TU Discord</title>
     <link rel="stylesheet" href="/static/style.css" type="text/css">    
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
     <link rel="stylesheet" href="/static/discordInvite.css"/>
