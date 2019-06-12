@@ -27,7 +27,8 @@ dependencies {
 
     compile "org.slf4j:slf4j-api:1.7.9"
     compile "ch.qos.logback:logback-classic:$logback_version"
-    
+    compile 'io.sentry:sentry-logback:1.7.16'
+
     compile "io.ktor:ktor-server-core:$ktor_version"
     compile "io.ktor:ktor-server-jetty:$ktor_version"
     compile "io.ktor:ktor-freemarker:$ktor_version"
