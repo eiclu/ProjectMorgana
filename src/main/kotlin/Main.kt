@@ -10,7 +10,7 @@ val clientSecret: String = System.getenv("DISCORD_CLIENTSECRET")
 val databaseHelper: DatabaseHelper = DatabaseHelper()
 val chatInterface: DiscordListener = DiscordListener(System.getenv("DISCORD_GUILDID").toLong(), databaseHelper)
 val jdaInstance: JDA = JDABuilder(System.getenv("DISCORD_BOTTOKEN")).build().apply { this.addEventListener(chatInterface) }
-val debug = false
+val debug = domain == "localhost:4567"
 
 fun main() { EngineMain.main(arrayOf()) }
 
