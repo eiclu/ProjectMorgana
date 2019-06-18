@@ -31,7 +31,15 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         if (!debug) {
             kotlin.runCatching {
                 user.openPrivateChannelAsync()
-                    .sendMessageAsync("Hi, I'm the channel management bot of the Informatik server of the TU Vienna. Please go to https://$domain/login/token/$token to set channels")
+                    .sendMessageAsync("""
+                        :wave: Hallo, ich bin der Channel-Manager des TU Wien Informatik Discord-Servers.
+                        Um die Channels für deine Lehrveranstaltungen auszuwählen, besuche die unten :link: verlinkte Seite.
+
+                        :wave: Hi, I'm the channel management bot of the Informatik server of the TU Vienna.
+                        Please go to the site :link: linked below to select your courses to unlock the corresponding channels.
+
+                        :link: :point_right: https://$domain/login/token/$token :point_left:
+                    """.trimIndent())
             }
         }
     }
