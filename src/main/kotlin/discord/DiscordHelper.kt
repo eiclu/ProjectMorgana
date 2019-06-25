@@ -38,7 +38,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                         :wave: Hi, I'm the channel management bot of the Informatik server of the TU Vienna.
                         Please go to the site :link: linked below to select your courses to unlock the corresponding channels.
 
-                        :link: :point_right: https://$domain/login/token/$token :point_left:
+                        :link: :point_right: <https://$domain/login/token/$token :point_left:>
                     """.trimIndent())
             }
         }
@@ -99,7 +99,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     }
 
     fun updateUserChannels(userId: Long) {
-        val member = guild.members.find { it.user.idLong == userId } ?: throw Exception("UserNotFoundException")
+        val member = guild.members.find { it.user.idLong == userId } ?: throw Exception("Did not find the User with the ID $userId on the server ${guild.name}")
         LOG.info("Permission update initiated for user ${member.user.asTag}")
         val subscribedCourseIds = databaseHelper.getCoursesForUser(userId).map { it.courseId }
         val subscribedChannelIds = subscribedCourseIds.map { databaseHelper.getChannelsForCourse(it) }.flatten().map { it.channelId }
