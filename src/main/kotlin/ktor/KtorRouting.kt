@@ -9,8 +9,6 @@ import io.ktor.http.Parameters
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.request.receive
-import io.ktor.request.receiveParameters
-import io.ktor.request.receiveText
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.post
@@ -18,11 +16,13 @@ import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.sessions.clear
 import io.ktor.sessions.sessions
-import jdaInstance
 import types.Channel
 import types.Course
+import types.Major
+import web.TokenException
 import web.loginWithDiscordOauth
 import web.loginWithToken
+import java.lang.RuntimeException
 
 fun Application.setupRoutingTable() {
     routing {
@@ -67,7 +67,7 @@ fun Application.setupRoutingTable() {
                 }
             }
 
-            /*route("/profile") {
+            route("/profile") {
                 intercept(ApplicationCallPipeline.Features) {
                     if (getUser() == null) {
                         redirect("/login")
@@ -77,24 +77,22 @@ fun Application.setupRoutingTable() {
                 get {
                     val user = getUser()!!
                     call.respond(generatePage("/profile", "templates/sites/profile.ftl", mapOf(
-                        "user" to user
+                        "user" to user,
+                        "majors" to Major.values()
                     ), user))
                 }
 
                 post {
                     val params = call.receive<Parameters>()
-                    //TODO: Vulnerable to SQL Injection
+                    val currentSemester = params["currentSemester"] ?: throw RuntimeException("Malformed POST request")
+                    val major = params["major"] ?: throw RuntimeException("Malformed POST request")
                     getUser()?.userId?.let { userId ->
-                        @Suppress("UNCHECKED_CAST")
-                        databaseHelper.updateUserInfo(userId, mapOf(
-                            "currentSemester" to params["currentSemester"]?.toIntOrNull(),
-                            "mayor" to params["mayor"],
-                            "fullName" to params["fullName"]
-                        ).filterValues { it != null } as Map<String, Any>)
+                        databaseHelper.updateUserInfo(userId, mapOf("CurrentSemester" to currentSemester, "Major" to major))
+                        chatInterface.onUserUpdateRole(userId)
                     }
                     redirect("/profile")
                 }
-            }*/
+            }
 
             route("/admin") {
                 intercept(ApplicationCallPipeline.Features) {
@@ -198,13 +196,24 @@ fun Application.setupRoutingTable() {
 
             route("/login") {
                 get {
-                    call.respond(generatePage("/login", "templates/sites/login.ftl", mapOf(), getUser()))
+                    call.respond(generatePage("/login", "templates/sites/login.ftl", mapOf()))
                 }
                 get("/token") {
                     call.respond(generatePage("/login/token", "templates/sites/token.ftl", mapOf(), getUser()))
                 }
-                get("/token/{token}") { loginWithToken(call.parameters["token"]) }
-                authenticate("discordOauth") { get("/oauth") { loginWithDiscordOauth() } }
+                get("/token/{token}") {
+                    try {
+                        loginWithToken(call.parameters["token"])
+                    } catch (e: TokenException) {
+                        log.info("Token authentication failed. Reason: ${e.localizedMessage}")
+                        call.respond(e.localizedMessage)
+                    }
+                }
+                authenticate("discordOauth") {
+                    get("/oauth") {
+                        loginWithDiscordOauth()
+                    }
+                }
             }
 
             get("/logout") {

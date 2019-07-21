@@ -8,18 +8,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
-import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction
-import org.junit.experimental.categories.Categories
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import types.Course
+import types.Major
+import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     private val LOG: Logger = LoggerFactory.getLogger(this::class.java)
-    
+    private val roles: List<Role> = guild.roles.filter { role -> Major.values().map { it.roleName }.contains(role.name) }.also {
+        LOG.info(it.joinToString(", ") { it.name })
+    }
     private val permissions = mutableListOf(
             Permission.MESSAGE_READ
     )
@@ -173,6 +175,15 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         val courses = databaseHelper.getCourses()
         courses.filter { it.userCount > 1 }.filter { databaseHelper.getChannelsForCourse(it.courseId).isEmpty() }.forEach {
             addChannelForCourse(it)
+        }
+    }
+
+    fun updateUserRole(userId: Long) {
+        val dbUser = databaseHelper.getUserById(userId)
+        val discordMember = guild.members.find { it.user.idLong == userId } ?: throw RuntimeException("User $userId not found on server")
+        guild.controller.run {
+            removeRolesFromMember(discordMember, roles).complete()
+            roles.find { it.name == dbUser?.mayor?.roleName }?.let { addSingleRoleToMember(discordMember, it).complete() }
         }
     }
 }

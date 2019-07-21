@@ -11,7 +11,7 @@
     </form>
 </div>
 <div id="courses-list">
-    <input type="text" id="search" placeholder="Search" />
+    <input type="text" class="inputfield" id="search" placeholder="Search" />
     <form action="/admin/deleteCourses" method="post">
         <ul class="menu">
             <#list subjects as subject, modules>

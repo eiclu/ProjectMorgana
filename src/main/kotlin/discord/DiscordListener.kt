@@ -16,6 +16,7 @@ class DiscordListener(val guildId: Long, val databaseHelper: DatabaseHelper) : L
     private val LOG: Logger = LoggerFactory.getLogger(this::class.java)
 
     lateinit var discordHelper: DiscordHelper
+
     override fun onReady(event: ReadyEvent) {
         LOG.info("Discord Bot Initializing")
         discordHelper = DiscordHelper(
@@ -27,7 +28,6 @@ class DiscordListener(val guildId: Long, val databaseHelper: DatabaseHelper) : L
         discordHelper.updateAllChannelPermissions()
         LOG.info("Discord Bot Ready")
     }
-
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
         LOG.debug("A new member joined the guild: ${event.user.name}")
         if (!databaseHelper.isInDatabase(event.user.idLong)) {
@@ -42,6 +42,10 @@ class DiscordListener(val guildId: Long, val databaseHelper: DatabaseHelper) : L
 
     override fun onChannelsUpdated() {
 
+    }
+
+    override fun onUserUpdateRole(userId: Long) {
+        discordHelper.updateUserRole(userId)
     }
 
     override fun onTextChannelDelete(event: TextChannelDeleteEvent) {

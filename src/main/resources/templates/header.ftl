@@ -5,7 +5,7 @@
         <#list navigation as page>
             <li class="<#if !page.url??>active</#if>">
                 <#if !page.url??><b><#else><a href="${page.url}"></#if>
-                    <img src="${page.iconUrl}">
+                    <img src="${page.iconUrl!"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"}">
                     <p>${page.title}</p>
                 <#if !page.url??></b><#else></a></#if>
             </li>

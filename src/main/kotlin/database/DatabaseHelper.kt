@@ -1,6 +1,5 @@
 package database
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config.log
 import org.intellij.lang.annotations.Language
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

@@ -1,34 +1,26 @@
 <#-- @ftlvariable name="user" type="types.User" -->
+<#-- @ftlvariable name="majors" type="java.util.List<types.Major>" -->
 <form action="/profile" method="post">
+    <span class="subject disHighlight">${user.userName!""}${user.userTag}</span>
     <table id="courses">
         <tr>
-            <td>Your ID</td>
-            <td>${user.userId?c}</td>
+            <td><label for="currentSemester">Current Semester</label></td>
+            <td><input type="number" class="inputfield" name="currentSemester" id="currentSemester" min="0" max="20" value="${user.currentSemester!"0"}"></td>
         </tr>
         <tr>
-            <td>Name</td>
-            <td><input type="text" name="fullName" value="${user.fullName!""}"></td>
-        </tr>
-        <tr>
-            <td>Current Semester</td>
-            <td><input type="number" name="currentSemester" min="0" max="20" value="${user.currentSemester!"0"}"></td>
-        </tr>
-        <#--<tr>
-            <td>Mayor</td>
+            <td><label for="major">Major</label></td>
             <td>
-                <label>
-                    <select name="mayor">
-                        <option value="SoftwareEngineering" <#if user.mayor == "SoftwareEngineering">checked</#if>>Software Engineering</option>
-                        <option value="TechnischeInformatik" <#if user.mayor == "TechnischeInformatik">checked</#if>>Technische Informatik</option>
-                        <option value="MedienInformatik" <#if user.mayor == "MedienInformatik">checked</#if>>Medien Informatik</option>
-                        <option value="MedizinischeInformatik" <#if user.mayor == "MedizinischeInformatik">checked</#if>>Medizinische Informatik</option>
-                        <option value="Wirtschaftsinformatik" <#if user.mayor == "Wirtschaftsinformatik">checked</#if>>Wirtschaftsinformatik</option>
-                    </select>
-                </label>
+                <select name="major" id="major" class="inputfield">
+                    <#list majors as major>
+                        <option value="${major!""}" <#if major == user.mayor>selected</#if>>
+                            ${major.majorName!""}
+                        </option>
+                    </#list>
+                </select>
             </td>
-        </tr>-->
+        </tr>
     </table>
-    <div id="bottombar">
-        <input type="submit" value="Update">
+    <div class="sideOut">
+        <input type="submit" class="button2" value="Update">
     </div>
 </form>

@@ -28,9 +28,9 @@ fun generateHtml(path: String, params: Map<String, Any>): String = try {
 }
 
 fun generateNavigation(url: String, user: User?): Set<Page> = when {
-    user == null -> pages.filter { !it.permissions }
-    !user.isAdmin -> pages.filter { !it.permissions }
-    else -> pages
+    user == null -> pages.filter { it.permissions.contains(Permissions.GUEST) }
+    !user.isAdmin -> pages.filter { it.permissions.contains(Permissions.MEMBER) }
+    else -> pages.filter { it.permissions.contains(Permissions.MEMBER) || it.permissions.contains(Permissions.ADMIN) }
 }.map {
     if (url == it.url) it.copy(url = null)
     else it

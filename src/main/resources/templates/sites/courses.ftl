@@ -3,7 +3,7 @@
     <div class="text">
         <small>Hier kannst du deine Kurse abonnieren. Bitte beachte, dass Channels erst erstellt werden, nachdem sich mindestens zwei Studierende für einen Kurs interessieren. Außerdem kann es etwas dauern, bis die Channels auf Discord für dich sichtbar werden!</small>
     </div>
-    <input type="text" id="search" placeholder="Search" />
+    <input type="text" id="search" class="inputfield" placeholder="Search" />
     <form action="/courses" method="post">
         <#--<span class="sort" data-sort="subject">Sort by subject</span>-->
         <ul class="menu">

@@ -48,7 +48,7 @@ fun Collection<Course>.cascaded(): Map<String, Map<String?, List<Course>>> = thi
  * Redirects to the provided route after a delay
  * To be used instead of call.respondRedirect()
  */
-suspend fun PipelineContext<Unit, ApplicationCall>.redirect(path: String, delayMilis: Int = 1000) {
+suspend fun PipelineContext<Unit, ApplicationCall>.redirect(path: String, @Suppress("UNUSED_PARAMETER") delayMilis: Int = 1000) {
     /*call.respond(generatePage("/redirect", "templates/redirect.ftl", mapOf(
         "location" to path,
         "delay" to delayMilis
