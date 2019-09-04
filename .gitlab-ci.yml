@@ -1,0 +1,16 @@
+stages:
+  - deploy
+
+variables:
+  APP_NAME: project-morgana
+
+deploy:
+  image: ilyasemenov/gitlab-ci-git-push
+  stage: deploy
+  environment:
+    name: production
+    url: https://$APP_NAME.looki.io/
+  only:
+    - master
+  script:
+    - git-push ssh://dokku@looki.io:22/$APP_NAME
