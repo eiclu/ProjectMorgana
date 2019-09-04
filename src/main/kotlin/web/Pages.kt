@@ -9,7 +9,7 @@ data class Page(
 
 val pages = setOf(
     Page("Info", "/", "/static/info.svg", listOf(Permissions.GUEST, Permissions.MEMBER)),
-    Page("Login", "/login"),
+    Page("Login", "/login", "/static/log-in.svg"),
     Page("Courses", "/courses", "/static/list.svg", listOf(Permissions.MEMBER)),
     Page("Profile", "/profile", "/static/user.svg", listOf(Permissions.MEMBER)),
     Page("Administration", "/admin", "/static/cog.svg", listOf(Permissions.ADMIN))
