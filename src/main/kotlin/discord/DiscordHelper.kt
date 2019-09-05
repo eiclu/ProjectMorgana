@@ -184,6 +184,15 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         guild.controller.run {
             removeRolesFromMember(discordMember, roles).complete()
             roles.find { it.name == dbUser?.mayor?.roleName }?.let { addSingleRoleToMember(discordMember, it).complete() }
+            roles.find { it.name == "Ersti" }?.let { 
+                if (dbUser?.currentSemester == 1) {
+                    LOG.info("Added Ersti Role to member ${dbUser?.userName}")
+                    addSingleRoleToMember(discordMember, it).complete()
+                } else {
+                    LOG.info("Removed Ersti Role from member ${dbUser?.userName}")
+                    removeSingleRoleFromMember(discordMember, it).complete()
+                }
+            }
         }
     }
 }
