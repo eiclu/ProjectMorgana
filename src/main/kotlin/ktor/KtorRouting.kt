@@ -88,7 +88,7 @@ fun Application.setupRoutingTable() {
                     val major = params["major"] ?: throw RuntimeException("Malformed POST request")
                     getUser()?.userId?.let { userId ->
                         databaseHelper.updateUserInfo(userId, mapOf("CurrentSemester" to currentSemester, "Major" to major))
-                        chatInterface.onUserUpdateRole(userId)
+                        chatInterface.onUserUpdateProfile(userId)
                     }
                     redirect("/profile")
                 }

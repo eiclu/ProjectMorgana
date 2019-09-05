@@ -5,7 +5,7 @@
     <table id="courses">
         <tr>
             <td><label for="currentSemester">Current Semester</label></td>
-            <td><input type="number" class="inputfield" name="currentSemester" id="currentSemester" min="0" max="20" value="${user.currentSemester!"0"}"></td>
+            <td><input type="number" class="inputfield" name="currentSemester" id="currentSemester" min="1" max="20" value="${user.currentSemester!"1"}"></td>
         </tr>
         <tr>
             <td><label for="major">Major</label></td>

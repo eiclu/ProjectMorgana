@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory
 import types.Course
 import types.Major
 import java.lang.RuntimeException
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -178,20 +182,37 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         }
     }
 
-    fun updateUserRole(userId: Long) {
+    val summerStart = OffsetDateTime.of(LocalDate.of(2019, 7, 1), LocalTime.MIDNIGHT, ZoneOffset.UTC)
+
+    fun updateUserProfile(userId: Long, onlyErsti: Boolean = false) {
         val dbUser = databaseHelper.getUserById(userId)
         val discordMember = guild.members.find { it.user.idLong == userId } ?: throw RuntimeException("User $userId not found on server")
         guild.controller.run {
-            removeRolesFromMember(discordMember, roles).complete()
-            roles.find { it.name == dbUser?.mayor?.roleName }?.let { addSingleRoleToMember(discordMember, it).complete() }
-            roles.find { it.name == "Ersti" }?.let { 
-                if (dbUser?.currentSemester == 1) {
-                    LOG.info("Added Ersti Role to member ${dbUser?.userName}")
-                    addSingleRoleToMember(discordMember, it).complete()
+            if (!onlyErsti) {
+                removeRolesFromMember(discordMember, roles).complete()
+                roles.find { it.name == dbUser?.mayor?.roleName }?.let { addSingleRoleToMember(discordMember, it).complete() }
+            }
+            guild.roles.find { it.name == "Ersti" }?.also { erstiRole ->
+                if (dbUser?.currentSemester == 1 || (dbUser?.currentSemester == 0 && discordMember.timeJoined.isAfter(summerStart))) {
+                    if (!discordMember.roles.contains(erstiRole)) {
+                        LOG.info("Added Ersti Role to member ${discordMember.user.asTag}")
+                        addSingleRoleToMember(discordMember, erstiRole).complete()
+                    }
                 } else {
-                    LOG.info("Removed Ersti Role from member ${dbUser?.userName}")
-                    removeSingleRoleFromMember(discordMember, it).complete()
+                    if (discordMember.roles.contains(erstiRole)) {
+                        LOG.info("Removed Ersti Role from member ${discordMember.user.asTag}")
+                        removeSingleRoleFromMember(discordMember, erstiRole).complete()
+                    }
                 }
+            }
+        }
+    }
+
+    fun updateAllUserProfiles() {
+        GlobalScope.launch {
+            guild.members.forEach { member ->
+                updateUserProfile(member.user.idLong, true)
+                delay(500L)
             }
         }
     }

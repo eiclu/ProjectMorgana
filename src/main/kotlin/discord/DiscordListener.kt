@@ -26,6 +26,7 @@ class DiscordListener(val guildId: Long, val databaseHelper: DatabaseHelper) : L
         discordHelper.addChannels()
         discordHelper.syncUsers()
         discordHelper.updateAllChannelPermissions()
+        discordHelper.updateAllUserProfiles()
         LOG.info("Discord Bot Ready")
     }
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
@@ -44,8 +45,8 @@ class DiscordListener(val guildId: Long, val databaseHelper: DatabaseHelper) : L
 
     }
 
-    override fun onUserUpdateRole(userId: Long) {
-        discordHelper.updateUserRole(userId)
+    override fun onUserUpdateProfile(userId: Long) {
+        discordHelper.updateUserProfile(userId)
     }
 
     override fun onTextChannelDelete(event: TextChannelDeleteEvent) {
