@@ -26,8 +26,8 @@ fun Application.module() {
      */
     install(StatusPages) {
         exception<Throwable> { cause ->
-            application.log.error(cause.localizedMessage)
-            call.respond(cause.localizedMessage)
+            application.log.warn(cause.message ?: cause.javaClass.name)
+            call.respond("An error occured, please try again. If this persists, please contact @Looki (Luca) on the Discord Server")
         }
     }
 

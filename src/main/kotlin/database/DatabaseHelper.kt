@@ -218,7 +218,7 @@ class DatabaseHelper() {
         }
     }
 
-    private fun <T> getOrNull(logger: Logger? = null, function: () -> T): T? = try { function() } catch (e: Exception) { (logger ?: log).warn(e.toString()); null }
+    private fun <T> getOrNull(logger: Logger? = null, function: () -> T): T? = try { function() } catch (e: Exception) { (logger ?: log).info(e.toString()); null }
 
     interface DatabaseItemInterface<T> {
         fun generateItem(item: ResultSet): T

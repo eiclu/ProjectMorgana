@@ -22,9 +22,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
-    private val LOG: Logger = LoggerFactory.getLogger(this::class.java)
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
     private val roles: List<Role> = guild.roles.filter { role -> Major.values().map { it.roleName }.contains(role.name) }.also {
-        LOG.info(it.joinToString(", ") { it.name })
+        log.info(it.joinToString(", ") { it.name })
     }
     private val permissions = mutableListOf(
             Permission.MESSAGE_READ
@@ -32,7 +32,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
 
     suspend fun inviteUser(user: User) {
         if (user.isBot) return
-        LOG.info("Generating an invite for user ${user.asTag}")
+        log.info("Generating an invite for user ${user.asTag}")
         val token = databaseHelper.generateTokenForUser(user.idLong)
         if (!debug) {
             kotlin.runCatching {
@@ -54,7 +54,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         sendMessage(message).queueAfter(delayMilis, TimeUnit.MILLISECONDS, {
             cont.resume(it)
         }, {
-            LOG.error("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}")
+            log.warn("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}")
         })
     }
 
@@ -62,12 +62,12 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         openPrivateChannel().queue({
             cont.resume(it)
         }, {
-            LOG.error("Could not open message channel to user $asTag. Reason: ${it.localizedMessage}")
+            log.warn("Could not open message channel to user $asTag. Reason: ${it.localizedMessage}")
         })
     }
 
     fun syncUsers() {
-        LOG.info("Syncing users with database")
+        log.info("Syncing users with database")
         val dbUserIds: List<Long> = databaseHelper.getUsers().map { it.userId }
         val serverUserIds: List<Long> = guild.members.map { it.user.idLong }
         val newUserIds: List<Long> = serverUserIds - dbUserIds
@@ -84,7 +84,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     }
 
     fun updateAllChannelPermissions() {
-        LOG.info("Updating all channel permissions")
+        log.info("Updating all channel permissions")
         GlobalScope.launch {
             databaseHelper.getCourses().forEach { course ->
                 val channels = databaseHelper.getChannelsForCourse(course.courseId).mapNotNull { channel -> guild.channels.find { it.idLong == channel.channelId } }
@@ -106,7 +106,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
 
     fun updateUserChannels(userId: Long) {
         val member = guild.members.find { it.user.idLong == userId } ?: throw Exception("Did not find the User with the ID $userId on the server ${guild.name}")
-        LOG.info("Permission update initiated for user ${member.user.asTag}")
+        log.info("Permission update initiated for user ${member.user.asTag}")
         val subscribedCourseIds = databaseHelper.getCoursesForUser(userId).map { it.courseId }
         val subscribedChannelIds = subscribedCourseIds.map { databaseHelper.getChannelsForCourse(it) }.flatten().map { it.channelId }
         GlobalScope.launch {
@@ -130,7 +130,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                 cont.resume(true)
             },
             {
-                LOG.error("Could not set permission overrides. Reason: ${it.localizedMessage}")
+                log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}")
             }
         )
     } else false
@@ -143,13 +143,13 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                 cont.resume(true)
             },
             {
-                LOG.error("Could not set permission overrides. Reason: ${it.localizedMessage}")
+                log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}")
             }
         )
     } else false
 
     fun addChannelForCourse(course: Course) {
-        LOG.info("Adding a channel for the course ${course.course}")
+        log.info("Adding a channel for the course ${course.course}")
         guild.controller.createTextChannel(course.shorthand ?: course.course.filter { it.isUpperCase() || it.isDigit()})
             .addPermissionOverride(guild.roles.find { it.name == "@everyone" }, mutableListOf<Permission>(), permissions)
             .addPermissionOverride(guild.roles.find { it.name == "Bot" }, permissions, mutableListOf<Permission>())
@@ -160,9 +160,9 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                 guild.getTextChannelById(channel.idLong)
                     .sendMessage("Welcome on the newly created channel for ${course.course}!").queue()
                 databaseHelper.addChannelToCourse(course.courseId, channel.idLong)
-                LOG.info("Added a channel")
+                log.info("Added a channel")
             }, { exception ->
-                LOG.error("Could not add new channel. Reason: ${exception.localizedMessage}")
+                log.warn("Could not add new channel. Reason: ${exception.localizedMessage}")
             })
     }
 
@@ -195,12 +195,12 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
             guild.roles.find { it.name == "Ersti" }?.also { erstiRole ->
                 if (dbUser?.currentSemester == 1 || (dbUser?.currentSemester == 0 && discordMember.timeJoined.isAfter(summerStart))) {
                     if (!discordMember.roles.contains(erstiRole)) {
-                        LOG.info("Added Ersti Role to member ${discordMember.user.asTag}")
+                        log.info("Added Ersti Role to member ${discordMember.user.asTag}")
                         addSingleRoleToMember(discordMember, erstiRole).complete()
                     }
                 } else {
                     if (discordMember.roles.contains(erstiRole)) {
-                        LOG.info("Removed Ersti Role from member ${discordMember.user.asTag}")
+                        log.info("Removed Ersti Role from member ${discordMember.user.asTag}")
                         removeSingleRoleFromMember(discordMember, erstiRole).complete()
                     }
                 }

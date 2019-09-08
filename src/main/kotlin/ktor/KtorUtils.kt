@@ -24,8 +24,8 @@ val tagMatcher = """#[0-9]{4}""".toRegex()
  */
 fun PipelineContext<Unit, ApplicationCall>.getUser(): User? = call.sessions.get<WebSession>()?.let {
     val dbUser = databaseHelper.getUserById(it.userId) ?: return@let null
-    val discordName = jdaInstance.getUserById(dbUser.userId)
-    return@let dbUser.copy(
+    val discordName: net.dv8tion.jda.api.entities.User? = jdaInstance.getUserById(dbUser.userId)
+    return@let if (discordName == null) dbUser else dbUser.copy(
         userName = discordName.name,
         userTag = tagMatcher.find(discordName.asTag)?.value ?: "0000",
         userImageUrl = discordName.avatarUrl

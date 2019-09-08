@@ -19,4 +19,5 @@
     <logger name="net.dv8tion.jda" level="INFO"/>
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.ktor.sessions" level="INFO"/>
+    <logger name="net.dv8tion.jda.internal.requests.WebSocketClient" level="ERROR"/>
 </configuration>
