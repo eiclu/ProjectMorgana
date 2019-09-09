@@ -12,7 +12,7 @@
             <td>
                 <select name="major" id="major" class="inputfield">
                     <#list majors as major>
-                        <option value="${major!""}" <#if major == user.mayor>selected</#if>>
+                        <option value="${major!""}" <#if (user.mayor??) and (major == user.mayor)>selected</#if>>
                             ${major.majorName!""}
                         </option>
                     </#list>
