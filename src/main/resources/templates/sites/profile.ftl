@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="user" type="types.User" -->
 <#-- @ftlvariable name="majors" type="java.util.List<types.Major>" -->
 <form action="/profile" method="post">
-    <span class="subject disHighlight">${user.userName!""}${user.userTag}</span>
+    <span class="subject disHighlight">${user.userName!""}${user.userTag!""}</span>
     <table id="courses">
         <tr>
             <td><label for="currentSemester">Current Semester</label></td>
