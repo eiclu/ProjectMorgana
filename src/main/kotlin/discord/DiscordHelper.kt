@@ -35,18 +35,22 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         log.info("Generating an invite for user ${user.asTag}")
         val token = databaseHelper.generateTokenForUser(user.idLong)
         if (!debug) {
-            kotlin.runCatching {
-                user.openPrivateChannelAsync()
-                    .sendMessageAsync("""
-                        :wave: Hallo, ich bin der Channel-Manager des TU Wien Informatik Discord-Servers.
-                        Um die Channels für deine Lehrveranstaltungen auszuwählen, besuche die unten :link: verlinkte Seite.
+            val message = """
+                :wave: Hallo, ich bin der Channel-Manager des TU Wien Informatik Discord-Servers.
+                Um die Channels für deine Lehrveranstaltungen auszuwählen, besuche die unten :link: verlinkte Seite.
 
-                        :wave: Hi, I'm the channel management bot of the Informatik server of the TU Vienna.
-                        Please go to the site :link: linked below to select your courses to unlock the corresponding channels.
+                :wave: Hi, I'm the channel management bot of the Informatik server of the TU Vienna.
+                Please go to the site :link: linked below to select your courses to unlock the corresponding channels.
 
-                        :link: :point_right: <https://$domain/login/token/$token :point_left:>
-                    """.trimIndent())
-            }
+                :link: :point_right: <https://$domain/login/token/$token> :point_left:
+            """.trimIndent()
+            user.openPrivateChannel().queue({ channel ->
+                channel.sendMessage(message).queue({}, {
+                    log.warn("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}")
+                })
+            }, {
+                log.warn("Could not open message channel to user ${user.asTag}. Reason: ${it.localizedMessage}")
+            })
         }
     }
 
