@@ -13,7 +13,7 @@ import java.util.*
 
 class DatabaseHelper() {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
-    private val dbConnection: Connection = DriverManager.getConnection("jdbc:${System.getenv("DB_URL")}", System.getenv("DB_USERNAME"), System.getenv("DB_PASSWORD"))
+    private fun getDbConnection() = DriverManager.getConnection("jdbc:${System.getenv("DB_URL")}", System.getenv("DB_USERNAME"), System.getenv("DB_PASSWORD"))
 
     fun popToken(token: String): Long? {
         val currentTime = System.currentTimeMillis() / 1000L
@@ -52,7 +52,6 @@ class DatabaseHelper() {
               LEFT OUTER JOIN Users on UCL.UserId = Users.UserId
               GROUP BY Courses.CourseId;
         """.trimIndent())
-        @Language("MySQL")
         val getCoursesQuery = """
             SELECT TempCourses.CourseId, Subject, Module, Course, Shorthand, UserCount FROM TempCourses
             LEFT OUTER JOIN User_Course_Links UCL on TempCourses.CourseId = UCL.CourseId
@@ -93,7 +92,6 @@ class DatabaseHelper() {
               LEFT OUTER JOIN Users on UCL.UserId = Users.UserId
               GROUP BY Courses.CourseId;
         """.trimIndent())
-        @Language("MySQL")
         val getCoursesQuery = """
             SELECT TempCourses.CourseId, Subject, Module, Course, Shorthand, UserCount FROM TempCourses
             WHERE TempCourses.CourseId=?
@@ -182,25 +180,31 @@ class DatabaseHelper() {
     }*/
 
     private fun <T : Any> getDatabaseResult(query: String, factory: DatabaseItemInterface<T>, vararg args: Any?): Set<T>? = getOrNull(log) {
-        val statement = dbConnection.prepareStatement(query).applyArgs(args)
-        log.trace(statement.toString())
-        val dbResult = statement.executeQuery()
-        generateSequence { if (dbResult.next()) factory.generateItem(dbResult) else null }.toSet()
+        getDbConnection().use { dbConnection ->
+            val statement = dbConnection.prepareStatement(query).applyArgs(args)
+            log.trace(statement.toString())
+            val dbResult = statement.executeQuery()
+            return@getOrNull generateSequence { if (dbResult.next()) factory.generateItem(dbResult) else null }.toSet()
+        }
     }
 
     private fun hasResult(query: String, vararg args: Any?): Boolean = getOrNull(log) {
-        val statement = dbConnection.prepareStatement(query).applyArgs(args)
-        log.trace(statement.toString())
-        statement.executeQuery().next()
-    } ?: false
-
-    private fun updateDatabase(query: String, vararg args: Any?): Boolean {
-        val result = getOrNull(log) {
+        getDbConnection().use { dbConnection ->
             val statement = dbConnection.prepareStatement(query).applyArgs(args)
             log.trace(statement.toString())
-            statement.executeUpdate()
-        } ?: return false
-        return result > 0
+            return@getOrNull statement.executeQuery().next()
+        }
+    } ?: false
+
+    private fun updateDatabase(query: String, vararg args: Any?): Boolean = run {
+        getDbConnection().use { dbConnection ->
+            val result = getOrNull(log) {
+                val statement = dbConnection.prepareStatement(query).applyArgs(args)
+                log.trace(statement.toString())
+                statement.executeUpdate()
+            } ?: return@run false
+            return@run result > 0
+        }
     }
 
     private fun PreparedStatement.applyArgs(args: Array<out Any?>): PreparedStatement = apply {
