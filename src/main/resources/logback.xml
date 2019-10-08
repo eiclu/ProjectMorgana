@@ -5,17 +5,17 @@
         </encoder>
     </appender>
 
-    <!-- Configure the Sentry appender, overriding the logging threshold to the WARN level -->
-    <appender name="Sentry" class="io.sentry.logback.SentryAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
-        </filter>
-    </appender>
+<!--    &lt;!&ndash; Configure the Sentry appender, overriding the logging threshold to the WARN level &ndash;&gt;-->
+<!--    <appender name="Sentry" class="io.sentry.logback.SentryAppender">-->
+<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--            <level>WARN</level>-->
+<!--        </filter>-->
+<!--    </appender>-->
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="Sentry" />
-    </root>
+<!--    <root level="INFO">-->
+<!--        <appender-ref ref="STDOUT"/>-->
+<!--        <appender-ref ref="Sentry" />-->
+<!--    </root>-->
     <logger name="net.dv8tion.jda" level="INFO"/>
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.ktor.sessions" level="INFO"/>
