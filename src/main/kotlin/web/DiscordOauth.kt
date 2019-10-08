@@ -60,7 +60,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth(guild: 
             application.log.info("${user.username}#${user.discriminator} logged in via Discord OAuth")
             redirect("/")
         } else {
-            throw Exception("This Discord account (${user.username}#${user.discriminator}) is not yet on the server. Please join first: https://discordapp.com/invite/BnvQsEp")
+            call.respond("This Discord account (${user.username}#${user.discriminator}) is not yet on the server. Please join first: https://discordapp.com/invite/BnvQsEp")
         }
     }
 }
