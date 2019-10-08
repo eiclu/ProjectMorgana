@@ -19,6 +19,7 @@ import io.ktor.sessions.set
 import io.ktor.util.pipeline.PipelineContext
 import ktor.WebSession
 import ktor.redirect
+import net.dv8tion.jda.api.entities.Guild
 import types.User
 
 val loginProvider = OAuthServerSettings.OAuth2ServerSettings(
@@ -41,7 +42,7 @@ data class JsonDiscordUser(
     val id: Long
 )
 
-suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth() {
+suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth(guild: Guild) {
     val principal = call.authentication.principal<OAuthAccessTokenResponse.OAuth2>()
     if (principal == null) {
         application.log.warn("OAuth request didn't return a proper principal")
@@ -51,11 +52,15 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth() {
             header("Authorization", "Bearer ${principal.accessToken}")
         }
         val user = Gson().fromJson(json, JsonDiscordUser::class.java)
-        if (!databaseHelper.isInDatabase(user.id)) {
-            databaseHelper.addUser(User(user.id))
+        if (guild.members.any { it.user.idLong == user.id }) {
+            if (!databaseHelper.isInDatabase(user.id)) {
+                databaseHelper.addUser(User(user.id))
+            }
+            call.sessions.set(WebSession(user.id))
+            application.log.info("${user.username}#${user.discriminator} logged in via Discord OAuth")
+            redirect("/")
+        } else {
+            throw Exception("This Discord account (${user.username}#${user.discriminator}) is not yet on the server. Please join first: https://discordapp.com/invite/BnvQsEp")
         }
-        call.sessions.set(WebSession(user.id))
-        application.log.info("${user.username}#${user.discriminator} logged in via Discord OAuth")
-        redirect("/")
     }
 }

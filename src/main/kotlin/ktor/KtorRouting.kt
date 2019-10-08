@@ -211,7 +211,7 @@ fun Application.setupRoutingTable() {
                 }
                 authenticate("discordOauth") {
                     get("/oauth") {
-                        loginWithDiscordOauth()
+                        loginWithDiscordOauth(chatInterface.discordHelper.guild)
                     }
                 }
             }
