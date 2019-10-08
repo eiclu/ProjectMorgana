@@ -80,7 +80,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                 val user = guild.members.find { it.user.idLong == userId }?.user
                 if (user != null && !user.isBot) {
                     databaseHelper.addUser(types.User(user.idLong))
-                    inviteUser(user)
+                    //inviteUser(user)
                 }
                 delay(1000L)
             }
