@@ -12,10 +12,10 @@
 <!--        </filter>-->
 <!--    </appender>-->
 
-<!--    <root level="INFO">-->
-<!--        <appender-ref ref="STDOUT"/>-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
 <!--        <appender-ref ref="Sentry" />-->
-<!--    </root>-->
+    </root>
     <logger name="net.dv8tion.jda" level="INFO"/>
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.ktor.sessions" level="INFO"/>
