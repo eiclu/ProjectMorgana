@@ -9,8 +9,8 @@ deploy:
   stage: deploy
   environment:
     name: production
-    url: https://$APP_NAME.looki.io/
+    url: https://tu-discord.xyz/
   only:
     - master
   script:
-    - git-push ssh://dokku@looki.io:22/$APP_NAME
+    - git-push ssh://dokku@51.15.53.66:22/$APP_NAME
