@@ -14,6 +14,7 @@ enum class Major(val roleName: String, val majorName: String) {
     M066_937("Master", "Master: Software Engineering Internet Computing"),
     M066_932("Master", "Master: Visual Computing"),
     M066_011("Master", "Master: Computational Logic"),
+    M066_645("Master", "Master: Data Science"),
     M066_950("Master", "Master: Didactics of Informatics");
 
     companion object {
