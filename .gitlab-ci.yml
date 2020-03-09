@@ -13,4 +13,4 @@ deploy:
   only:
     - master
   script:
-    - git-push ssh://dokku@51.15.53.66:22/$APP_NAME
+    - git-push ssh://dokku@37.252.188.126/$APP_NAME
