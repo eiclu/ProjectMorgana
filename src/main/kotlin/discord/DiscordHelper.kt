@@ -140,7 +140,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     } else false
 
     private suspend fun GuildChannel.safeRemovePermissionOverrideAsync(member: Member, delayMilis: Long = 0): Boolean = if (this.getPermissionOverride(member) != null) suspendCoroutine { cont ->
-        getPermissionOverride(member).delete().queueAfter(
+        getPermissionOverride(member)?.delete()?.queueAfter(
             delayMilis,
             TimeUnit.MILLISECONDS,
             {
@@ -149,20 +149,20 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
             {
                 log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}")
             }
-        )
+        ) ?: log.warn("Could not acquire permission overrides")
     } else false
 
     fun addChannelForCourse(course: Course) {
         log.info("Adding a channel for the course ${course.course}")
-        guild.controller.createTextChannel(course.shorthand ?: course.course.filter { it.isUpperCase() || it.isDigit()})
-            .addPermissionOverride(guild.roles.find { it.name == "@everyone" }, mutableListOf<Permission>(), permissions)
-            .addPermissionOverride(guild.roles.find { it.name == "Bot" }, permissions, mutableListOf<Permission>())
-            .addPermissionOverride(guild.roles.find { it.name == "Channel Inspector" }, permissions, mutableListOf<Permission>())
+        guild.createTextChannel(course.shorthand ?: course.course.filter { it.isUpperCase() || it.isDigit()})
+            .addPermissionOverride(guild.roles.find { it.name == "@everyone" } as IPermissionHolder, mutableListOf<Permission>(), permissions)
+            .addPermissionOverride(guild.roles.find { it.name == "Bot" } as IPermissionHolder, permissions, mutableListOf<Permission>())
+            .addPermissionOverride(guild.roles.find { it.name == "Channel Inspector" } as IPermissionHolder, permissions, mutableListOf<Permission>())
             .setTopic(arrayOf(course.course, course.module, course.subject).filterNotNull().joinToString(" - "))
             .setParent(getCategory(course.subject))
             .queue({ channel ->
                 guild.getTextChannelById(channel.idLong)
-                    .sendMessage("Welcome on the newly created channel for ${course.course}!").queue()
+                    ?.sendMessage("Welcome on the newly created channel for ${course.course}!")?.queue()
                 databaseHelper.addChannelToCourse(course.courseId, channel.idLong)
                 log.info("Added a channel")
             }, { exception ->
@@ -172,7 +172,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
 
     private fun getCategory(subject: String): Category {
         if (guild.getCategoriesFiltered(subject).isEmpty()) {
-            guild.controller.createCategory(subject).complete()
+            guild.createCategory(subject).complete()
         }
         return guild.getCategoriesFiltered(subject).first()
     }
@@ -191,21 +191,21 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     fun updateUserProfile(userId: Long, onlyErsti: Boolean = false) {
         val dbUser = databaseHelper.getUserById(userId)
         val discordMember = guild.members.find { it.user.idLong == userId } ?: throw RuntimeException("User $userId not found on server")
-        guild.controller.run {
+        guild.run {
             if (!onlyErsti) {
-                removeRolesFromMember(discordMember, roles).complete()
-                roles.find { it.name == dbUser?.mayor?.roleName }?.let { addSingleRoleToMember(discordMember, it).complete() }
+                roles.forEach { removeRoleFromMember(discordMember, it).complete() }
+                roles.find { it.name == dbUser?.mayor?.roleName }?.let { addRoleToMember(discordMember, it).complete() }
             }
             guild.roles.find { it.name == "Ersti" }?.also { erstiRole ->
                 if (dbUser?.currentSemester == 1 || (dbUser?.currentSemester == 0 && discordMember.timeJoined.isAfter(summerStart))) {
                     if (!discordMember.roles.contains(erstiRole)) {
                         log.info("Added Ersti Role to member ${discordMember.user.asTag}")
-                        addSingleRoleToMember(discordMember, erstiRole).complete()
+                        addRoleToMember(discordMember, erstiRole).complete()
                     }
                 } else {
                     if (discordMember.roles.contains(erstiRole)) {
                         log.info("Removed Ersti Role from member ${discordMember.user.asTag}")
-                        removeSingleRoleFromMember(discordMember, erstiRole).complete()
+                        removeRoleFromMember(discordMember, erstiRole).complete()
                     }
                 }
             }
