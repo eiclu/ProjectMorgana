@@ -262,7 +262,7 @@ class DatabaseHelper() {
                 is Long -> setLong(index + 1, argument)
                 is String -> setString(index + 1, argument)
                 else -> {
-                    log.warn("One Argument was of type ${argument::class.qualifiedName}. Statement: ${toString()}")
+                    log.warn("One Argument was of type ${argument::class.qualifiedName}. Statement: ${toString()}", RuntimeException())
                     setObject(index + 1, argument)
                 }
             }

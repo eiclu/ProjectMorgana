@@ -46,10 +46,10 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
             """.trimIndent()
             user.openPrivateChannel().queue({ channel ->
                 channel.sendMessage(message).queue({}, {
-                    log.warn("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}")
+                    log.warn("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}", it)
                 })
             }, {
-                log.warn("Could not open message channel to user ${user.asTag}. Reason: ${it.localizedMessage}")
+                log.warn("Could not open message channel to user ${user.asTag}. Reason: ${it.localizedMessage}", it)
             })
         }
     }
@@ -58,7 +58,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         sendMessage(message).queueAfter(delayMilis, TimeUnit.MILLISECONDS, {
             cont.resume(it)
         }, {
-            log.warn("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}")
+            log.warn("Could not send message to user ${user.asTag}. Reason: ${it.localizedMessage}", it)
         })
     }
 
@@ -66,7 +66,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         openPrivateChannel().queue({
             cont.resume(it)
         }, {
-            log.warn("Could not open message channel to user $asTag. Reason: ${it.localizedMessage}")
+            log.warn("Could not open message channel to user $asTag. Reason: ${it.localizedMessage}", it)
         })
     }
 
@@ -134,7 +134,7 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                 cont.resume(true)
             },
             {
-                log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}")
+                log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}", it)
             }
         )
     } else false
@@ -147,9 +147,9 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                 cont.resume(true)
             },
             {
-                log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}")
+                log.warn("Could not set permission overrides. Reason: ${it.localizedMessage}", it)
             }
-        ) ?: log.warn("Could not acquire permission overrides")
+        ) ?: log.warn("Could not acquire permission overrides", RuntimeException())
     } else false
 
     fun addChannelForCourse(course: Course) {
@@ -165,8 +165,8 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
                     ?.sendMessage("Welcome on the newly created channel for ${course.course}!")?.queue()
                 databaseHelper.addChannelToCourse(course.courseId, channel.idLong)
                 log.info("Added a channel")
-            }, { exception ->
-                log.warn("Could not add new channel. Reason: ${exception.localizedMessage}")
+            }, {
+                log.warn("Could not add new channel. Reason: ${it.localizedMessage}", it)
             })
     }
 

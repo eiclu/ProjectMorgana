@@ -45,7 +45,7 @@ data class JsonDiscordUser(
 suspend fun PipelineContext<Unit, ApplicationCall>.loginWithDiscordOauth(guild: Guild) {
     val principal = call.authentication.principal<OAuthAccessTokenResponse.OAuth2>()
     if (principal == null) {
-        application.log.warn("OAuth request didn't return a proper principal")
+        application.log.warn("OAuth request didn't return a proper principal", RuntimeException())
         call.respond("Login failed. Please try again later")
     } else {
         val json = HttpClient(Apache).get<String>("https://discordapp.com/api/v6/users/@me") {
