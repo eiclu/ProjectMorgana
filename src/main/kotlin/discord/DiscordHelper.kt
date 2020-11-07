@@ -23,7 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
-    private val roles: List<Role> = guild.roles.filter { role -> Major.values().map { it.roleName }.contains(role.name) }.also {
+    private val majorRoles: List<Role> = guild.roles.filter { role -> Major.values().map { it.roleName }.contains(role.name) }.also {
         log.info(it.joinToString(", ") { it.name })
     }
     private val permissions = mutableListOf(
@@ -193,8 +193,8 @@ class DiscordHelper(val guild: Guild, val databaseHelper: DatabaseHelper) {
         val discordMember = guild.members.find { it.user.idLong == userId } ?: throw RuntimeException("User $userId not found on server")
         guild.run {
             if (!onlyErsti) {
-                roles.forEach { removeRoleFromMember(discordMember, it).complete() }
-                roles.find { it.name == dbUser?.mayor?.roleName }?.let { addRoleToMember(discordMember, it).complete() }
+                majorRoles.forEach { removeRoleFromMember(discordMember, it).complete() }
+                majorRoles.find { it.name == dbUser?.mayor?.roleName }?.let { addRoleToMember(discordMember, it).complete() }
             }
             guild.roles.find { it.name == "Ersti" }?.also { erstiRole ->
                 if (dbUser?.currentSemester == 1 || (dbUser?.currentSemester == 0 && discordMember.timeJoined.isAfter(summerStart))) {
