@@ -36,6 +36,7 @@ a {
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
+    height: fit-content;
 }
 
 #nav {
